@@ -5,11 +5,13 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Form } from "@/components/ui/form";
 import CustomFormField from "../CustomFormField";
-import user from "/public/assets/icons/user.svg";
-import email from "/public/assets/icons/email.svg";
+import userSVG from "/public/assets/icons/user.svg";
+import emailSVG from "/public/assets/icons/email.svg";
 import SubmitButton from "../SubmitButton";
 import { useState } from "react";
 import { UserFormValidation } from "@/lib/validation";
+import { useRouter } from "next/navigation";
+import { createUser } from "@/lib/actions/patient.actions";
 export enum FormFieldType {
   INPUT = "input",
   TEXTAREA = "textarea",
@@ -26,6 +28,7 @@ const formSchema = z.object({
 });
 
 export default function PatientForm() {
+  const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const form = useForm<z.infer<typeof UserFormValidation>>({
     resolver: zodResolver(UserFormValidation),
@@ -36,9 +39,26 @@ export default function PatientForm() {
     },
   });
 
-  function onSubmit(values: z.infer<typeof UserFormValidation>) {
+  const onSubmit = async (values: z.infer<typeof UserFormValidation>) => {
     setIsLoading(true);
-  }
+
+    try {
+      const user = {
+        name: values.name,
+        email: values.email,
+        phone: values.phone,
+      };
+
+      const newUser = await createUser(user);
+
+      if (newUser) {
+        router.push(`/patients/${newUser.$id}/register`);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+    setIsLoading(false);
+  };
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
@@ -52,7 +72,7 @@ export default function PatientForm() {
           name="name"
           label="Full name"
           placeholder="Amr Benshi"
-          iconSrc={user}
+          iconSrc={userSVG}
           iconAlt="user"
         />
         <CustomFormField
@@ -61,7 +81,7 @@ export default function PatientForm() {
           name="email"
           label="email"
           placeholder="Amrbenshi@gmail.com"
-          iconSrc={email}
+          iconSrc={emailSVG}
           iconAlt="email"
         />
         <CustomFormField
