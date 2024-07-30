@@ -86,7 +86,7 @@ export const PasskeyModal = () => {
         </AlertDialogHeader>
         <div>
           <InputOTP
-            maxLength={6}
+            maxLength={7}
             value={passkey}
             onChange={(value) => setPasskey(value)}
           >
@@ -97,6 +97,7 @@ export const PasskeyModal = () => {
               <InputOTPSlot className="shad-otp-slot" index={3} />
               <InputOTPSlot className="shad-otp-slot" index={4} />
               <InputOTPSlot className="shad-otp-slot" index={5} />
+              <InputOTPSlot className="shad-otp-slot" index={6} />
             </InputOTPGroup>
           </InputOTP>
 
