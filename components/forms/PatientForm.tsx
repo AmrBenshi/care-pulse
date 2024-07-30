@@ -12,6 +12,7 @@ import { useState } from "react";
 import { UserFormValidation } from "@/lib/validation";
 import { useRouter } from "next/navigation";
 import { createUser } from "@/lib/actions/patient.actions";
+import "react-phone-number-input/style.css";
 export enum FormFieldType {
   INPUT = "input",
   TEXTAREA = "textarea",
@@ -89,7 +90,7 @@ export default function PatientForm() {
           fieldType={FormFieldType.PHONE_INPUT}
           name="phone"
           label="phone number"
-          placeholder="+963 999 999 999"
+          placeholder="999 999 999"
         />
         <SubmitButton isLoading={isLoading}>Get Started</SubmitButton>
       </form>
